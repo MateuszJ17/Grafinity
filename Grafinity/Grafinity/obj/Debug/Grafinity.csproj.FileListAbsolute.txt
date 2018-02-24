@@ -1,8 +1,0 @@
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\bin\Debug\Grafinity.exe
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\bin\Debug\Grafinity.pdb
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\obj\Debug\Grafinity.csprojResolveAssemblyReference.cache
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\obj\Debug\Grafinity.Properties.Resources.resources
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\obj\Debug\Grafinity.csproj.GenerateResource.Cache
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\obj\Debug\Grafinity.csproj.CoreCompileInputs.cache
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\obj\Debug\Grafinity.exe
-C:\Users\Mateusz\C# Projects\Grafinity\Grafinity\Grafinity\obj\Debug\Grafinity.pdb
