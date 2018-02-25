@@ -19,12 +19,5 @@ namespace Grafinity
             comboBox1.Left = 100;
             comboBox1.Items.Add("Normal Screenshot");
         }
-
-        public void Initialize()
-        {
-            Button screenshot = new Button();
-            screenshot.Parent = this;
-            screenshot.Left = 100;
-        }
     }
 }
