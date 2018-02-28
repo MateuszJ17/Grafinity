@@ -6,6 +6,7 @@ using System.IO;
 using System.Configuration;
 using System.Collections;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace Grafinity
 {
@@ -13,18 +14,36 @@ namespace Grafinity
     {
         static string config = File.ReadAllText(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config");
 
-        public static void UpdateConfig()
+        public static string GetMode()
         {
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            values.Add("key1", "value1");
-            values.Add("key2", "value2");
-            string json = JsonConvert.SerializeObject(values);
-            File.WriteAllText(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config", json);
+            string json = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            return values["mode"];
         }
 
-        public static void ConfigContent()
+        public static string GetPath()
         {
-            Console.WriteLine(config);
+            string json = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            return values["path"];
+        }
+
+        public static void UpdateMode(string value)
+        {
+            string json = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            values["mode"] = value;
+            string json2 = JsonConvert.SerializeObject(values);
+            File.WriteAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"), json2);
+        }
+
+        public static void UpdatePath(string value)
+        {
+            string json = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            values["path"] = value;
+            string json2 = JsonConvert.SerializeObject(values);
+            File.WriteAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"), json2);
         }
     }
 }
