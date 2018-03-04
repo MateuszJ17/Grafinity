@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
@@ -21,9 +21,28 @@ namespace Grafinity
                                         0,
                                         Screen.PrimaryScreen.Bounds.Size,
                                         CopyPixelOperation.SourceCopy);
-
+            
             ImageManager.SaveScreen(scrshot); //saving screenshot
+
+            string mode = ConfigManager.GetMode();
+            if(mode == "BW")
+            {
+
             ImageManipulator.BlackWhite();
+
+            }
+            else if(mode == "Negative")
+            {
+
+            ImageManipulator.Negative();
+
+            }
+            else if(mode == "Sepia")
+            {
+
+            ImageManipulator.Sepia();
+
+            }
         }
     }
 }

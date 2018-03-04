@@ -8,7 +8,7 @@ namespace Grafinity
 {
     static class ImageManager
     {
-        static string path = @"C:\1"; //specify path to the directory
+        static string path = ConfigManager.GetPath(); //specify path to the directory
         static string[] allFiles = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 
         public static void GetFiles()
@@ -21,24 +21,16 @@ namespace Grafinity
             }
             foreach (var item in grphFiles)
             {
-                Console.WriteLine(item); 
+                Console.WriteLine(item);
             }
         }
         public static void SaveScreen(Bitmap screenshot)
         {
-            string screenName = "Screen"; 
+            string screenName = "Screen";
             DateTime date = DateTime.Now;
             string saveName = String.Format("{0}_{1}.png", screenName, date.ToString("MM/dd_H_mm_s")); // generic name + current date
-            string savePath = String.Format(@"C:\1\{0}", saveName);
-            screenshot.Save(savePath, ImageFormat.Png);
+            string savePath = path;
+            screenshot.Save(savePath);
         }
-        //public static void SaveScreen_BW(Bitmap screenshot)
-        //{
-        //    string screenName = "BWScreen";
-        //    DateTime date = DateTime.Now;
-        //    string saveName_BW = String.Format("{0}_{1}.png", screenName, date.ToString("MM/dd_H_mm_s")); // generic name + current date
-        //    string savePath_BW = String.Format(@"C:\1\{0}", saveName_BW);
-        //    screenshot.Save(savePath_BW, ImageFormat.Png);
-        //}
     }
 }
