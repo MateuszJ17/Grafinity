@@ -14,38 +14,71 @@ namespace Grafinity
         public GrafinityWindow()
         {
             Height = 150;
-            Width = 310;
+            Width = 350;
 
-            Button screenshot = new Button
+            ///////////MENU///////////
+            MenuStrip menu = new MenuStrip { Parent = this };
+            ToolStripMenuItem file = new ToolStripMenuItem { Text = "File" };
+            ToolStripMenuItem capture = new ToolStripMenuItem
             {
-                Parent = this,
-                Width = 90,
-                Height = 50,
                 Text = "Capture",
-                Image = Image.FromFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\camera.png"),
-                TextAlign = ContentAlignment.MiddleRight,
-                ImageAlign = ContentAlignment.MiddleLeft
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.C)))
             };
-
-            //Podpiac screenshot
-            screenshot.Click += (o, i) =>
+            ToolStripMenuItem save = new ToolStripMenuItem
             {
-                
-            };
-
-            Button savescreen = new Button
-            {
-                Parent = this,
-                Left = 90,
-                Width = 80,
-                Height = 50,
                 Text = "Save",
-                Image = Image.FromFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\floppy.png"),
-                TextAlign = ContentAlignment.MiddleRight,
-                ImageAlign = ContentAlignment.MiddleLeft
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.S)))
+            };
+            ToolStripMenuItem choosedirectory = new ToolStripMenuItem
+            {
+                Text = "Save directory...",
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.D)))
+            };
+            ToolStripMenuItem choosemode = new ToolStripMenuItem { Text = "Screenshot mode" };
+            ToolStripMenuItem grayscale = new ToolStripMenuItem
+            {
+                Text = "Grayscale",
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.D1)))
+            };
+            ToolStripMenuItem bW = new ToolStripMenuItem
+            {
+                Text = "BW",
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.D2)))
+            };        
+            ToolStripMenuItem sepia = new ToolStripMenuItem
+            {
+                Text = "Sepia",
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.D3)))
+            };
+            ToolStripMenuItem negative = new ToolStripMenuItem
+            {
+                Text = "Negative",
+                ShortcutKeys = ((Keys)((Keys.Control | Keys.D4)))
+            };
+            ToolStripMenuItem sort = new ToolStripMenuItem { Text = "Sort" };
+            ToolStripMenuItem byName = new ToolStripMenuItem { Text = "By Name" }; 
+            ToolStripMenuItem byDate = new ToolStripMenuItem { Text = "By Date" };
+            ToolStripMenuItem about = new ToolStripMenuItem { Text = "About" };
+
+            //Add items to menu
+            menu.Items.AddRange(new ToolStripItem[] { file, sort, about });
+            file.DropDownItems.AddRange(new ToolStripItem[] { capture, save, choosedirectory, choosemode });
+            choosemode.DropDownItems.AddRange(new ToolStripItem[] { grayscale, bW, sepia, negative });
+            sort.DropDownItems.AddRange(new ToolStripItem[] { byName, byDate });
+            ///////////MENU///////////
+
+            ///////FUNCTIONALITY///////
+            capture.Click += (o, i) =>
+            {
+                Console.WriteLine("Capturing...");
             };
 
-            savescreen.Click += (o, i) =>
+            save.Click += (o, i) =>
+            {
+                Console.WriteLine("Saving...");
+            };
+
+            choosedirectory.Click += (o, i) =>
             {
                 FolderBrowserDialog browser = new FolderBrowserDialog();
                 string path = "";
@@ -54,26 +87,26 @@ namespace Grafinity
                 {
                     path = browser.SelectedPath;
                     ConfigManager.UpdatePath(path);
-                }              
+                }
             };
 
-            ComboBox chmode = new ComboBox
+            grayscale.Click += (o, i) =>
             {
-                Parent = this,
-                Left = 170
+                ConfigManager.UpdateMode("Grayscale");
             };
-
-            chmode.Items.Add("Normal");
-            chmode.Items.Add("Grayscale");
-            chmode.Items.Add("Sepia");
-            chmode.Items.Add("Negative");
-
-            chmode.SelectedValueChanged += (o, i) =>
+            bW.Click += (o, i) =>
             {
-                Object selectedItem = chmode.SelectedItem;
-                ConfigManager.UpdateMode(selectedItem.ToString());
+                ConfigManager.UpdateMode("BW");
             };
-
+            sepia.Click += (o, i) =>
+            {
+                ConfigManager.UpdateMode("Sepia");
+            };
+            negative.Click += (o, i) =>
+            {
+                ConfigManager.UpdateMode("Negative");
+            };
+            ///////FUNCTIONALITY///////
         }
     }
 }
