@@ -5,16 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 using System.IO;
+using System.Threading;
 
-namespace Grafinity
+
+namespace GrafinityFrontend
 {
     class GrafinityWindow : Form
     {
         public GrafinityWindow()
         {
-            Height = 150;
-            Width = 350;
+            Height = 550;
+            Width = 550;
 
             ///////////MENU///////////
             MenuStrip menu = new MenuStrip { Parent = this };
@@ -67,10 +71,65 @@ namespace Grafinity
             sort.DropDownItems.AddRange(new ToolStripItem[] { byName, byDate });
             ///////////MENU///////////
 
+            Label screenlabel = new Label
+            {
+                AutoSize = true,
+                Location = new Point(225, 30),
+                Parent = this,
+                Text = "Your screenshot"
+            };
+
+            PictureBox screenbox = new PictureBox
+            {
+                Parent = this,
+                Location = new Point(125, 50),
+                Height = 200,
+                Width = 300
+            };
+
             ///////FUNCTIONALITY///////
+            screenbox.Click += (o, i) =>
+            {
+                Console.WriteLine("Saving...");                
+            };
+
+            void DisplayScreenshot()
+            {
+                if (File.Exists(ConfigManager.GetPath() + "\\Przechwytywanie.png"))
+                {
+                    Image image = Image.FromFile(ConfigManager.GetPath() + "\\Przechwytywanie.png");
+                    Rectangle destRect = new Rectangle(0, 0, 300, 200);
+                    Bitmap destImage = new Bitmap(300, 200);
+                    destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+                    using (Graphics graphics = Graphics.FromImage(destImage))
+                    {
+                        graphics.CompositingMode = CompositingMode.SourceCopy;
+                        graphics.CompositingQuality = CompositingQuality.HighQuality;
+                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        graphics.SmoothingMode = SmoothingMode.HighQuality;
+                        graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                        using (ImageAttributes wrapMode = new ImageAttributes())
+                        {
+                            wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                            graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                        }
+                    }
+                    SolidBrush myBrush = new SolidBrush(Color.FromArgb(22, 33, 33, 33));
+                    Graphics formGraphics;
+                    formGraphics = CreateGraphics();
+                    formGraphics.FillRectangle(myBrush, new Rectangle(120, 45, 310, 210));
+                    myBrush.Dispose();
+                    formGraphics.Dispose();
+                    screenbox.Image = destImage;
+                }
+            }
+
             capture.Click += (o, i) =>
             {
+                Thread.Sleep(1500);
                 Console.WriteLine("Capturing...");
+                DisplayScreenshot();
             };
 
             save.Click += (o, i) =>
@@ -105,6 +164,10 @@ namespace Grafinity
             negative.Click += (o, i) =>
             {
                 ConfigManager.UpdateMode("Negative");
+            };
+            about.Click += (o, i) =>
+            {
+                MessageBox.Show("        Created by Liamky and Sneaky17");
             };
             ///////FUNCTIONALITY///////
         }
