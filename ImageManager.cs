@@ -26,11 +26,9 @@ namespace Grafinity
         }
         public static void SaveScreen(Bitmap screenshot)
         {
-            string screenName = "Screen";
             DateTime date = DateTime.Now;
-            string saveName = String.Format("{0}_{1}.png", screenName, date.ToString("MM/dd_H_mm_s")); // generic name + current date
-            string savePath = path;
-            screenshot.Save(savePath);
+            string saveName = String.Format("{0}_{1}.png", "Screen", date.ToString("MM/dd_H_mm_s")); // generic name + current date
+            screenshot.Save(path);
         }
     }
 }

@@ -22,25 +22,24 @@ namespace Grafinity
                                         Screen.PrimaryScreen.Bounds.Size,
                                         CopyPixelOperation.SourceCopy);
             
-            ImageManager.SaveScreen(scrshot); //saving screenshot
+            ImageManager.SaveScreen(scrshot);
 
             string mode = ConfigManager.GetMode();
-            if(mode == "BW")
+
+            switch(mode)
             {
-
-            ImageManipulator.BlackWhite();
-
-            }
-            else if(mode == "Negative")
-            {
-
-            ImageManipulator.Negative();
-
-            }
-            else if(mode == "Sepia")
-            {
-
-            ImageManipulator.Sepia();
+                case "BW":
+                    ImageManipulator.BlackWhite();
+                    break;
+                case "Sepia":
+                    ImageManipulator.Sepia();
+                    break;
+                case "Negative":
+                    ImageManipulator.Negative();
+                    break;
+                default:
+                    Capture();
+                    break;
 
             }
         }
