@@ -7,7 +7,7 @@ namespace Grafinity
 {
     static class ImageCapturer
     {
-        public static void Capture()
+        public static Bitmap Capture()
         {
             var scrshot = new Bitmap(Screen.PrimaryScreen.Bounds.Width, //creating new bitmap
                               Screen.PrimaryScreen.Bounds.Height,
@@ -42,6 +42,7 @@ namespace Grafinity
                     break;
 
             }
+            return scrshot;
         }
     }
 }
