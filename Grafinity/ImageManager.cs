@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace Grafinity
 {
@@ -11,18 +12,22 @@ namespace Grafinity
         static string path = ConfigManager.GetPath(); //specify path to the directory
         static string[] allFiles = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 
-        public static void GetFiles()
+        public static ImageList GetFiles()
         {
             List<string> grphFiles = new List<string>(); //empty list to add images to
+            ImageList imgs = new ImageList();
             foreach (var file in allFiles)
             {
                 if (file.EndsWith(".png") | file.EndsWith(".jpeg") | file.EndsWith(".bmp"))
-                    grphFiles.Add(file); // if extension is right, add to the list
+                //grphFiles.Add(file); // if extension is right, add to the list
+                imgs.ImageSize = new Size(100, 100);
+                imgs.Images.Add(Image.FromFile(path)); // specify path if its wrong
             }
             foreach (var item in grphFiles)
             {
                 Console.WriteLine(item);
             }
+            return imgs;
         }
         public static void SaveScreen(Bitmap screenshot)
         {
