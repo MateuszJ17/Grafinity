@@ -11,14 +11,14 @@ using System.IO;
 using System.Threading;
 
 
-namespace GrafinityFrontend
+namespace Grafinity
 {
     class GrafinityWindow : Form
     {
         public GrafinityWindow()
         {
-            Height = 550;
-            Width = 550;
+            Height = 620;
+            Width = 530;
 
             ///////////MENU///////////
             MenuStrip menu = new MenuStrip { Parent = this };
@@ -48,7 +48,7 @@ namespace GrafinityFrontend
             {
                 Text = "BW",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D2)))
-            };        
+            };
             ToolStripMenuItem sepia = new ToolStripMenuItem
             {
                 Text = "Sepia",
@@ -60,7 +60,7 @@ namespace GrafinityFrontend
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D4)))
             };
             ToolStripMenuItem sort = new ToolStripMenuItem { Text = "Sort" };
-            ToolStripMenuItem byName = new ToolStripMenuItem { Text = "By Name" }; 
+            ToolStripMenuItem byName = new ToolStripMenuItem { Text = "By Name" };
             ToolStripMenuItem byDate = new ToolStripMenuItem { Text = "By Date" };
             ToolStripMenuItem about = new ToolStripMenuItem { Text = "About" };
 
@@ -76,59 +76,122 @@ namespace GrafinityFrontend
                 AutoSize = true,
                 Location = new Point(225, 30),
                 Parent = this,
-                Text = "Your screenshot"
+                Text = "Your screenshot",
+                Visible = false
             };
 
+            Label foldelabel = new Label
+            {
+                AutoSize = true,
+                Location = new Point(160, 255),
+                Parent = this,
+                Text = "Other image files in the desired directory",
+                Visible = true
+            };
             PictureBox screenbox = new PictureBox
             {
                 Parent = this,
-                Location = new Point(125, 50),
+                Location = new Point(110, 50),
                 Height = 200,
-                Width = 300
+                Width = 300,
+                BackColor = Color.FromArgb(255, 233, 233, 233),
+                BorderStyle = BorderStyle.Fixed3D
             };
 
-            ///////FUNCTIONALITY///////
-            screenbox.Click += (o, i) =>
+            Panel imagePanel = new Panel
             {
-                Console.WriteLine("Saving...");                
+                Parent = this,
+                Location = new Point(10, 275),
+                Height = 300,
+                Width = 500,
+                BackColor = Color.LightGray,
+                BorderStyle = BorderStyle.Fixed3D
             };
+
+            imagePanel.AutoScroll = false;
+            imagePanel.HorizontalScroll.Enabled = false;
+            imagePanel.HorizontalScroll.Visible = false;
+            imagePanel.HorizontalScroll.Maximum = 0;
+            imagePanel.AutoScroll = true;
+
+
+            ///////FUNCTIONALITY///////
 
             void DisplayScreenshot()
             {
-                if (File.Exists(ConfigManager.GetPath() + "\\Przechwytywanie.png"))
-                {
-                    Image image = Image.FromFile(ConfigManager.GetPath() + "\\Przechwytywanie.png");
-                    Rectangle destRect = new Rectangle(0, 0, 300, 200);
-                    Bitmap destImage = new Bitmap(300, 200);
-                    destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-                    using (Graphics graphics = Graphics.FromImage(destImage))
-                    {
-                        graphics.CompositingMode = CompositingMode.SourceCopy;
-                        graphics.CompositingQuality = CompositingQuality.HighQuality;
-                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                        graphics.SmoothingMode = SmoothingMode.HighQuality;
-                        graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                Image image = Image.FromFile(ConfigManager.GetPath() + "\\przechwytywanie.png");
+                screenbox.Image = ResizeImage(image, 300, 200);
+            }
 
-                        using (ImageAttributes wrapMode = new ImageAttributes())
-                        {
-                            wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                            graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                        }
+            void DisplayOther()
+            {
+                imagePanel.Controls.Clear();
+                int x = 5;
+                int y = 5;
+
+                //placeholder until ImageManager is corrected
+                List<string> grphFiles = new List<string>
+                {
+                    ConfigManager.GetPath() + "\\przechwytywanie.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie2.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie3.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie4.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie5.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie6.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie7.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie8.png",
+                    ConfigManager.GetPath() + "\\przechwytywanie9.png"
+                };
+                //foreach (string path in ImageManager.GetFiles())
+                foreach (string path in grphFiles)
+                {
+                    Image img = Image.FromFile(path);
+                    PictureBox pic = new PictureBox
+                    {
+                        Image = ResizeImage(img, 150, 100),
+                        Size = new Size(150, 100)
+                    };
+
+                    if (x + pic.Width > imagePanel.Width)
+                    {
+                        x = 5;
+                        y += 110;
                     }
-                    SolidBrush myBrush = new SolidBrush(Color.FromArgb(22, 33, 33, 33));
-                    Graphics formGraphics;
-                    formGraphics = CreateGraphics();
-                    formGraphics.FillRectangle(myBrush, new Rectangle(120, 45, 310, 210));
-                    myBrush.Dispose();
-                    formGraphics.Dispose();
-                    screenbox.Image = destImage;
+
+                    pic.Location = new Point(x, y);
+                    x += pic.Width + 10;
+
+                    imagePanel.Controls.Add(pic);
                 }
+            }
+
+            Bitmap ResizeImage(Image image, int dw, int dh)
+            {
+                Rectangle destRect = new Rectangle(0, 0, dw, dh);
+                Bitmap destImage = new Bitmap(dw, dh);
+                destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+                using (Graphics graphics = Graphics.FromImage(destImage))
+                {
+                    graphics.CompositingMode = CompositingMode.SourceCopy;
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                    using (ImageAttributes wrapMode = new ImageAttributes())
+                    {
+                        wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                        graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                    }
+                }
+                return destImage;
             }
 
             capture.Click += (o, i) =>
             {
                 Thread.Sleep(1500);
                 Console.WriteLine("Capturing...");
+                screenlabel.Visible = true;
                 DisplayScreenshot();
             };
 
@@ -141,12 +204,14 @@ namespace GrafinityFrontend
             {
                 FolderBrowserDialog browser = new FolderBrowserDialog();
                 string path = "";
+                browser.SelectedPath = ConfigManager.GetPath();
 
                 if (browser.ShowDialog() == DialogResult.OK)
                 {
                     path = browser.SelectedPath;
                     ConfigManager.UpdatePath(path);
                 }
+                DisplayOther();
             };
 
             grayscale.Click += (o, i) =>
