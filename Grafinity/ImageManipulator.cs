@@ -10,7 +10,7 @@ namespace Grafinity
 {
     static class ImageManipulator
     {
-        public static void BlackWhite()
+        public static Bitmap BlackWhite()
         {
             Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
 
@@ -27,10 +27,11 @@ namespace Grafinity
                     screenshot.SetPixel(i, j, Color.FromArgb(gray, gray, gray));
                 }
             }
-            screenshot.Save(@"C:\1\test_bw.png", ImageFormat.Png);
+            //screenshot.Save(@"C:\1\test_bw.png", ImageFormat.Png);
+            return screenshot;
         }
 
-        public static void Negative()
+        public static Bitmap Negative()
         {
             Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
             Color c;
@@ -52,10 +53,11 @@ namespace Grafinity
                 }
 
             }
-            screenshot.Save(@"C:\1\test_negative.png", ImageFormat.Png);
+            //screenshot.Save(@"C:\1\test_negative.png", ImageFormat.Png);
+            return screenshot;
         }
 
-        public static void Sepia()
+        public static Bitmap Sepia()
         {
             Color p;
             Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
@@ -105,7 +107,8 @@ namespace Grafinity
                     screenshot.SetPixel(j, i, Color.FromArgb(a, r, g, b));
                 }
             }
-            screenshot.Save(@"C:\1\test_sepia.png", ImageFormat.Png);
+            //screenshot.Save(@"C:\1\test_sepia.png", ImageFormat.Png);
+            return screenshot;
         }
 
     }

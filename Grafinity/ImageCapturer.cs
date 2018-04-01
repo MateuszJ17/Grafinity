@@ -26,22 +26,6 @@ namespace Grafinity
 
             string mode = ConfigManager.GetMode();
 
-            switch(mode)
-            {
-                case "BW":
-                    ImageManipulator.BlackWhite();
-                    break;
-                case "Sepia":
-                    ImageManipulator.Sepia();
-                    break;
-                case "Negative":
-                    ImageManipulator.Negative();
-                    break;
-                default:
-                    Capture();
-                    break;
-
-            }
             return scrshot;
         }
     }
