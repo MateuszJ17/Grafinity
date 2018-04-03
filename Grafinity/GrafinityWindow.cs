@@ -22,43 +22,52 @@ namespace Grafinity
 
             ///////////MENU///////////
             MenuStrip menu = new MenuStrip { Parent = this };
+
             ToolStripMenuItem file = new ToolStripMenuItem { Text = "File" };
+
             ToolStripMenuItem capture = new ToolStripMenuItem
             {
                 Text = "Capture",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.C)))
             };
+
             ToolStripMenuItem save = new ToolStripMenuItem
             {
                 Text = "Save",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.S)))
             };
+
             ToolStripMenuItem choosedirectory = new ToolStripMenuItem
             {
                 Text = "Save directory...",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D)))
             };
+
             ToolStripMenuItem choosemode = new ToolStripMenuItem { Text = "Screenshot mode" };
             ToolStripMenuItem grayscale = new ToolStripMenuItem
             {
                 Text = "Grayscale",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D1)))
             };
+
             ToolStripMenuItem bW = new ToolStripMenuItem
             {
                 Text = "BW",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D2)))
             };
+
             ToolStripMenuItem sepia = new ToolStripMenuItem
             {
                 Text = "Sepia",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D3)))
             };
+
             ToolStripMenuItem negative = new ToolStripMenuItem
             {
                 Text = "Negative",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D4)))
             };
+
             ToolStripMenuItem sort = new ToolStripMenuItem { Text = "Sort" };
             ToolStripMenuItem byName = new ToolStripMenuItem { Text = "By Name" };
             ToolStripMenuItem byDate = new ToolStripMenuItem { Text = "By Date" };
@@ -142,6 +151,7 @@ namespace Grafinity
                     ConfigManager.GetPath() + "\\przechwytywanie8.png",
                     ConfigManager.GetPath() + "\\przechwytywanie9.png"
                 };
+
                 //foreach (string path in ImageManager.GetFiles())
                 foreach (string path in grphFiles)
                 {
@@ -170,6 +180,7 @@ namespace Grafinity
                 Rectangle destRect = new Rectangle(0, 0, dw, dh);
                 Bitmap destImage = new Bitmap(dw, dh);
                 destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
                 using (Graphics graphics = Graphics.FromImage(destImage))
                 {
                     graphics.CompositingMode = CompositingMode.SourceCopy;
@@ -184,6 +195,7 @@ namespace Grafinity
                         graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
                     }
                 }
+
                 return destImage;
             }
 
@@ -195,45 +207,26 @@ namespace Grafinity
                 DisplayScreenshot();
             };
 
-            save.Click += (o, i) =>
-            {
-                Console.WriteLine("Saving...");
-            };
+            save.Click += (o, i) => Console.WriteLine("Saving...");
 
             choosedirectory.Click += (o, i) =>
             {
                 FolderBrowserDialog browser = new FolderBrowserDialog();
-                string path = "";
                 browser.SelectedPath = ConfigManager.GetPath();
 
                 if (browser.ShowDialog() == DialogResult.OK)
                 {
-                    path = browser.SelectedPath;
-                    ConfigManager.UpdatePath(path);
+                    ConfigManager.UpdatePath(browser.SelectedPath);
                 }
+
                 DisplayOther();
             };
 
-            grayscale.Click += (o, i) =>
-            {
-                ConfigManager.UpdateMode("Grayscale");
-            };
-            bW.Click += (o, i) =>
-            {
-                ConfigManager.UpdateMode("BW");
-            };
-            sepia.Click += (o, i) =>
-            {
-                ConfigManager.UpdateMode("Sepia");
-            };
-            negative.Click += (o, i) =>
-            {
-                ConfigManager.UpdateMode("Negative");
-            };
-            about.Click += (o, i) =>
-            {
-                MessageBox.Show("        Created by Liamky and Sneaky17");
-            };
+            grayscale.Click += (o, i) => ConfigManager.UpdateMode("Grayscale");
+            bW.Click += (o, i) => ConfigManager.UpdateMode("BW");
+            sepia.Click += (o, i) => ConfigManager.UpdateMode("Sepia");
+            negative.Click += (o, i) => ConfigManager.UpdateMode("Negative");
+            about.Click += (o, i) => MessageBox.Show("        Created by Liamky and Sneaky17");
             ///////FUNCTIONALITY///////
         }
     }
