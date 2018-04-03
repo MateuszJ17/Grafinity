@@ -8,8 +8,15 @@ using System.Drawing.Imaging;
 
 namespace Grafinity
 {
+    /// <summary>
+    /// Class containing functions for captured image manipulation.
+    /// </summary>
     static class ImageManipulator
     {
+        /// <summary>
+        /// Turns an image into grayscale alternative.
+        /// </summary>
+        /// <returns></returns>
         public static Bitmap BlackWhite()
         {
             Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
@@ -31,78 +38,56 @@ namespace Grafinity
             return screenshot;
         }
 
+        /// <summary>
+        /// Reverses colors of an image.
+        /// </summary>
+        /// <returns></returns>
         public static Bitmap Negative()
         {
             Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
             Color c;
 
             for (int i = 0; i < screenshot.Width; i++)
-
             {
-
                 for (int j = 0; j < screenshot.Height; j++)
-
                 {
-
                     c = screenshot.GetPixel(i, j);
-
                     c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
-
                     screenshot.SetPixel(i, j, c);
-
                 }
-
             }
             //screenshot.Save(@"C:\1\test_negative.png", ImageFormat.Png);
             return screenshot;
         }
 
+        /// <summary>
+        /// Apply sepia effect to an image.
+        /// </summary>
+        /// <returns></returns>
         public static Bitmap Sepia()
         {
             Color p;
             Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
-            //sepia
+
+            int a, r, g, b, tr, tg, tb;
             for (int i = 0; i < screenshot.Height; i++)
             {
                 for (int j = 0; j < screenshot.Width; j++)
                 {
                     p = screenshot.GetPixel(j, i);
 
-                    int a = p.A;
-                    int r = p.R;
-                    int g = p.G;
-                    int b = p.B;
+                    a = p.A;
+                    r = p.R;
+                    g = p.G;
+                    b = p.B;
 
-                    int tr = (int)(0.393 * r + 0.769 * g + 0.189 * b);
-                    int tg = (int)(0.349 * r + 0.686 * g + 0.168 * b);
-                    int tb = (int)(0.272 * r + 0.534 * g + 0.131 * b);
+                    tr = (int)(0.393 * r + 0.769 * g + 0.189 * b);
+                    tg = (int)(0.349 * r + 0.686 * g + 0.168 * b);
+                    tb = (int)(0.272 * r + 0.534 * g + 0.131 * b);
 
-                    if (tr > 255)
-                    {
-                        r = 255;
-                    }
-                    else
-                    {
-                        r = tr;
-                    }
-
-                    if (tg > 255)
-                    {
-                        g = 255;
-                    }
-                    else
-                    {
-                        g = tg;
-                    }
-
-                    if (tb > 255)
-                    {
-                        b = 255;
-                    }
-                    else
-                    {
-                        b = tb;
-                    }
+                    r = Math.Min(255, tr);
+                    g = Math.Min(255, tg);
+                    b = Math.Min(255, tb);
 
                     screenshot.SetPixel(j, i, Color.FromArgb(a, r, g, b));
                 }
