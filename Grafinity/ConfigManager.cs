@@ -16,7 +16,7 @@ namespace Grafinity
     /// </summary>
     public static class ConfigManager
     {
-        private static string config = File.ReadAllText(Application.ExecutablePath + "\\config.config");
+        private static string config = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
 
         /// <summary>
         /// String containing parsed config.
@@ -29,10 +29,7 @@ namespace Grafinity
         /// <returns></returns>
         public static string GetMode()
         {
-            string json = File.ReadAllText(Application.ExecutablePath + "\\config.config");
-
-            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(config);
             return values["mode"];
         }
 
@@ -41,11 +38,8 @@ namespace Grafinity
         /// </summary>
         /// <returns></returns>
         public static string GetPath()
-        {
-            string json = File.ReadAllText(Application.ExecutablePath + "\\config.config");
-
-            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-
+        { 
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(config);
             return values["path"];
         }
 
@@ -55,13 +49,13 @@ namespace Grafinity
         /// <param name="value"></param>
         public static void UpdateMode(string value)
         {
-            string json = File.ReadAllText(Application.ExecutablePath + "\\config.config");
+            string json = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
             Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 
             values["mode"] = value;
 
             json = JsonConvert.SerializeObject(values);
-            File.WriteAllText(Application.ExecutablePath + "\\config.config", json);
+            File.WriteAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"), json);
         }
 
         /// <summary>
@@ -70,13 +64,13 @@ namespace Grafinity
         /// <param name="value"></param>
         public static void UpdatePath(string value)
         {
-            string json = File.ReadAllText(Application.ExecutablePath + "\\config.config");
+            string json = File.ReadAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"));
             Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 
             values["path"] = value;
 
             json = JsonConvert.SerializeObject(values);
-            File.WriteAllText(Application.ExecutablePath + "\\config.config", json);
+            File.WriteAllText((Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\config.config"), json);
         }
     }
 }

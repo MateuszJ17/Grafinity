@@ -35,8 +35,6 @@ namespace Grafinity
                 Screen.PrimaryScreen.Bounds.Size,
                 CopyPixelOperation.SourceCopy
             );
-            
-            ImageManager.SaveScreen(scrshot);
 
             return scrshot;
         }

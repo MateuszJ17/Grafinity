@@ -19,6 +19,10 @@ namespace Grafinity
         {
             Height = 620;
             Width = 530;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Bitmap scrshot = new Bitmap(1, 1);
 
             ///////////MENU///////////
             MenuStrip menu = new MenuStrip { Parent = this };
@@ -44,12 +48,12 @@ namespace Grafinity
             };
 
             ToolStripMenuItem choosemode = new ToolStripMenuItem { Text = "Screenshot mode" };
-            ToolStripMenuItem grayscale = new ToolStripMenuItem
+
+            ToolStripMenuItem normal = new ToolStripMenuItem
             {
-                Text = "Grayscale",
+                Text = "Normal",
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D1)))
             };
-
             ToolStripMenuItem bW = new ToolStripMenuItem
             {
                 Text = "BW",
@@ -68,16 +72,12 @@ namespace Grafinity
                 ShortcutKeys = ((Keys)((Keys.Control | Keys.D4)))
             };
 
-            ToolStripMenuItem sort = new ToolStripMenuItem { Text = "Sort" };
-            ToolStripMenuItem byName = new ToolStripMenuItem { Text = "By Name" };
-            ToolStripMenuItem byDate = new ToolStripMenuItem { Text = "By Date" };
             ToolStripMenuItem about = new ToolStripMenuItem { Text = "About" };
 
             //Add items to menu
-            menu.Items.AddRange(new ToolStripItem[] { file, sort, about });
+            menu.Items.AddRange(new ToolStripItem[] { file, about });
             file.DropDownItems.AddRange(new ToolStripItem[] { capture, save, choosedirectory, choosemode });
-            choosemode.DropDownItems.AddRange(new ToolStripItem[] { grayscale, bW, sepia, negative });
-            sort.DropDownItems.AddRange(new ToolStripItem[] { byName, byDate });
+            choosemode.DropDownItems.AddRange(new ToolStripItem[] { normal, bW, sepia, negative });
             ///////////MENU///////////
 
             Label screenlabel = new Label
@@ -126,35 +126,21 @@ namespace Grafinity
 
             ///////FUNCTIONALITY///////
 
-            void DisplayScreenshot()
+            void DisplayScreenshot(Bitmap bitmap)
             {
-                Image image = Image.FromFile(ConfigManager.GetPath() + "\\przechwytywanie.png");
+                Image image = bitmap;
                 screenbox.Image = ResizeImage(image, 300, 200);
             }
-
+            
             void DisplayOther()
             {
                 imagePanel.Controls.Clear();
                 int x = 5;
                 int y = 5;
-
-                //placeholder until ImageManager is corrected
-                List<string> grphFiles = new List<string>
+                
+                foreach (string path in ImageManager.GetFiles())
                 {
-                    ConfigManager.GetPath() + "\\przechwytywanie.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie2.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie3.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie4.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie5.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie6.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie7.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie8.png",
-                    ConfigManager.GetPath() + "\\przechwytywanie9.png"
-                };
-
-                //foreach (string path in ImageManager.GetFiles())
-                foreach (string path in grphFiles)
-                {
+                    Console.WriteLine(path);
                     Image img = Image.FromFile(path);
                     PictureBox pic = new PictureBox
                     {
@@ -201,13 +187,34 @@ namespace Grafinity
 
             capture.Click += (o, i) =>
             {
+                scrshot = ImageCapturer.Capture();
                 Thread.Sleep(1500);
-                Console.WriteLine("Capturing...");
                 screenlabel.Visible = true;
-                DisplayScreenshot();
+                switch (ConfigManager.GetMode())
+                {
+                    case "Negative":
+                        {
+                            ImageManipulator.Negative(scrshot);                         
+                        }
+                        break;
+                    case "Sepia":
+                        {
+                            ImageManipulator.Sepia(scrshot);
+                        }
+                        break;
+                    case "BW":
+                        {
+                            ImageManipulator.BlackWhite(scrshot);
+                        }
+                        break;
+                }
+                DisplayScreenshot(scrshot);
             };
 
-            save.Click += (o, i) => Console.WriteLine("Saving...");
+            save.Click += (o, i) =>
+            {
+                scrshot.Save(ImageManager.SaveName(), ImageFormat.Png);
+            };
 
             choosedirectory.Click += (o, i) =>
             {
@@ -222,10 +229,26 @@ namespace Grafinity
                 DisplayOther();
             };
 
-            grayscale.Click += (o, i) => ConfigManager.UpdateMode("Grayscale");
-            bW.Click += (o, i) => ConfigManager.UpdateMode("BW");
-            sepia.Click += (o, i) => ConfigManager.UpdateMode("Sepia");
-            negative.Click += (o, i) => ConfigManager.UpdateMode("Negative");
+            normal.Click += (o, i) =>
+            {
+                ConfigManager.UpdateMode("Normal");
+                DisplayScreenshot(scrshot);
+            };
+            bW.Click += (o, i) =>
+            {
+                ConfigManager.UpdateMode("BW");
+                DisplayScreenshot(ImageManipulator.BlackWhite(scrshot));
+            };
+            sepia.Click += (o, i) =>
+            {
+                DisplayScreenshot(ImageManipulator.Sepia(scrshot));
+                ConfigManager.UpdateMode("Sepia");
+            };
+            negative.Click += (o, i) =>
+            {
+                DisplayScreenshot(ImageManipulator.Negative(scrshot));
+                ConfigManager.UpdateMode("Negative");
+            };
             about.Click += (o, i) => MessageBox.Show("        Created by Liamky and Sneaky17");
             ///////FUNCTIONALITY///////
         }

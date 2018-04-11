@@ -30,33 +30,29 @@ namespace Grafinity
         /// Returns list of all images in configured path.
         /// </summary>
         /// <returns></returns>
-        public static ImageList GetFiles()
+        public static List<string> GetFiles()
         {
             List<string> grphFiles = new List<string>(); //empty list to add images to
-            ImageList imgs = new ImageList();
 
             foreach (var file in AllFiles)
             {
-                //if (file.EndsWith(".png") | file.EndsWith(".jpeg") | file.EndsWith(".bmp"))
-                //grphFiles.Add(file); // if extension is right, add to the list
-                imgs.ImageSize = new Size(100, 100);
-                imgs.Images.Add(Image.FromFile(Path)); // specify path if its wrong
+                if (file.EndsWith(".png"))// | file.EndsWith(".jpeg") | file.EndsWith(".bmp"))
+                {
+                    grphFiles.Add(file); // if extension is right, add to the list
+                }
             }
 
-            grphFiles.ForEach(x => Console.WriteLine(x));
-
-            return imgs;
+            return grphFiles;
         }
 
         /// <summary>
         /// Capture screen and store it in a configured path
         /// </summary>
         /// <param name="screenshot"></param>
-        public static void SaveScreen(Bitmap screenshot)
+        public static string SaveName( )
         {
-            string saveName = String.Format("{0}_{1}.png", "Screen", DateTime.Now.ToString("MM/dd_H_mm_s")); // generic name + current date
-
-            screenshot.Save(Path);
+            string saveName = ConfigManager.GetPath() + "\\" + String.Format("{0}_{1}.png", "Screen", DateTime.Now.ToString("MM/dd_H_mm_s")); // generic name + current date
+            return saveName;
         }
     }
 }

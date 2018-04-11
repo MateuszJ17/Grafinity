@@ -17,10 +17,8 @@ namespace Grafinity
         /// Turns an image into grayscale alternative.
         /// </summary>
         /// <returns></returns>
-        public static Bitmap BlackWhite()
+        public static Bitmap BlackWhite(Bitmap screenshot)
         {
-            Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
-
             for (int i = 0; i < screenshot.Width; i++)
             {
                 for (int j = 0; j < screenshot.Height; j++)
@@ -42,9 +40,8 @@ namespace Grafinity
         /// Reverses colors of an image.
         /// </summary>
         /// <returns></returns>
-        public static Bitmap Negative()
+        public static Bitmap Negative(Bitmap screenshot)
         {
-            Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
             Color c;
 
             for (int i = 0; i < screenshot.Width; i++)
@@ -64,10 +61,9 @@ namespace Grafinity
         /// Apply sepia effect to an image.
         /// </summary>
         /// <returns></returns>
-        public static Bitmap Sepia()
+        public static Bitmap Sepia(Bitmap screenshot)
         {
             Color p;
-            Bitmap screenshot = new Bitmap(@"C:\1\Test.png");
 
             int a, r, g, b, tr, tg, tb;
             for (int i = 0; i < screenshot.Height; i++)
